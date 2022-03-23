@@ -6,7 +6,7 @@ const handler = async (event: any, _context: any) : Promise<void> => {
     const client = new DynamoDB.DocumentClient()
 
     await client.put({
-        TableName: 'jordi-sapes-dynamodb-table',
+        TableName: 'joel-guitart-dynamodb-table',
         Item: {
             partitionKey: event.id, ...event.data
         }
