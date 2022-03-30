@@ -62,63 +62,61 @@ Resources:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
 
+   LambdaWriteDynamodbRole:
+     Type: AWS::IAM::Role
+     Properties:
+       RoleName: !Sub '${AWS::StackName}-LambdaWriteDynamodbRole'
+       AssumeRolePolicyDocument:
+         Version: '2012-10-17'
+         Statement:
+           - Effect: Allow
+             Principal:
+               Service:
+                 lambda.amazonaws.com
+             Action:
+               sts:AssumeRole
+       Path: /
+       ManagedPolicyArns:
+         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+       Policies:
+         - PolicyName: !Sub '${AWS::StackName}-LambdaWriteDynamodbPolicy'
+           PolicyDocument:
+             Version: '2012-10-17'
+             Statement:
+               - Effect: Allow
+                 Action:
+                   - dynamodb:PutItem
+                   - dynamodb:DeleteItem
+                 Resource:
+                   - !GetAtt Dynamodb.Arn
 
-  LambdaWriteDynamodbRole:
-    Type: AWS::IAM::Role
-    Properties:
-      RoleName: !Sub '${AWS::StackName}-LambdaWriteDynamodbRole'
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                lambda.amazonaws.com
-            Action:
-              sts:AssumeRole
-      Path: /
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-      Policies:
-        - PolicyName: !Sub '${AWS::StackName}-LambdaWriteDynamodbPolicy'
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - dynamodb:PutItem
-                  - dynamodb:DeleteItem
-                Resource:
-                  - !GetAtt Dynamodb.Arn
-
-  LambdaReadDynamodbRole:
-    Type: AWS::IAM::Role
-    Properties:
-      RoleName: !Sub '${AWS::StackName}-LambdaReadDynamodbRole'
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                lambda.amazonaws.com
-            Action:
-              sts:AssumeRole
-      Path: /
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-      Policies:
-        - PolicyName: !Sub '${AWS::StackName}-LambdaReadDynamodbPolicy'
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - dynamodb:GetItem
-                Resource:
-                  - !GetAtt Dynamodb.Arn
-
-
+   LambdaReadDynamodbRole:
+     Type: AWS::IAM::Role
+     Properties:
+       RoleName: !Sub '${AWS::StackName}-LambdaReadDynamodbRole'
+       AssumeRolePolicyDocument:
+         Version: '2012-10-17'
+         Statement:
+           - Effect: Allow
+             Principal:
+               Service:
+                 lambda.amazonaws.com
+             Action:
+               sts:AssumeRole
+       Path: /
+       ManagedPolicyArns:
+         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+       Policies:
+         - PolicyName: !Sub '${AWS::StackName}-LambdaReadDynamodbPolicy'
+           PolicyDocument:
+             Version: '2012-10-17'
+             Statement:
+               - Effect: Allow
+                 Action:
+                   - dynamodb:GetItem
+                 Resource:
+                   - !GetAtt Dynamodb.Arn
+  
 
   PutLambda:
     Type: AWS::Serverless::Function
